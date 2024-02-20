@@ -81,11 +81,12 @@
 
 - (UIImage*) makeImage: (UIImage*)image withTint: (UIColor*)color {
     UIImage* newImage = [image imageWithRenderingMode: UIImageRenderingModeAlwaysTemplate];
-    UIGraphicsBeginImageContextWithOptions(image.size, NO, newImage.scale);
-    [color set];
-    [newImage drawInRect: CGRectMake(0, 0, image.size.width, newImage.size.height)];
-    newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
+    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:image.size];
+    newImage = [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
+        CGRect rect = CGRectMake(0, 0, image.size.width, image.size.height);
+        [color setFill];
+        [newImage drawInRect:rect];
+    }];
     return newImage;
 }
 
@@ -175,7 +176,7 @@
             }
             return [mutableRequest copy];
         }];
-        
+
         SDWebImageContext* context = @{SDWebImageContextDownloadRequestModifier: requestModifier};
 
         // Set priority.
