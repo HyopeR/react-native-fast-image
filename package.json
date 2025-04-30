@@ -36,7 +36,7 @@
         "ReactNativeFastImageExample"
     ],
     "scripts": {
-        "prepare": "yarn clean && tsc",
+        "prepare": "tsc",
         "clean": "rm -rf dist tsconfig.tsbuildinfo",
         "build": "yarn clean && tsc",
         "example": "yarn workspace reactnativefastimageexample",
