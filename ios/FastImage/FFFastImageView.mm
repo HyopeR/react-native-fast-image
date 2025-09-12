@@ -3,6 +3,7 @@
 #import <SDWebImage/UIView+WebCache.h>
 #import <SDWebImageAVIFCoder/SDImageAVIFCoder.h>
 #import <SDWebImageWebPCoder/SDImageWebPCoder.h>
+#import <SDWebImageSVGCoder/SDImageSVGCoder.h>
 
 @interface FFFastImageView ()
 
@@ -112,6 +113,7 @@ static NSString * const kFFFastImageDefaultErrorMessage = @"Load failed";
     self.clipsToBounds = YES;
     [[SDImageCodersManager sharedManager] addCoder:[SDImageAVIFCoder sharedCoder]];
     [[SDImageCodersManager sharedManager] addCoder:[SDImageWebPCoder sharedCoder]];
+    [[SDImageCodersManager sharedManager] addCoder:[SDImageSVGCoder sharedCoder]];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
