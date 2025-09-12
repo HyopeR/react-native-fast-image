@@ -34,6 +34,7 @@ Pod::Spec.new do |s|
   s.dependency 'SDWebImage', '>= 5.19.1'
   s.dependency 'SDWebImageWebPCoder', '~> 0.14'
   s.dependency 'SDWebImageAVIFCoder', '~> 0.11.0'
+  s.dependency 'SDWebImageSVGCoder', '~> 1.7.0'
   s.dependency 'libavif/libdav1d', '~> 0.11.1'
   s.dependency 'libavif/core', '~> 0.11.1'
 end
