@@ -60,7 +60,7 @@ FastImage leverages **[SDWebImage (iOS)](https://github.com/rs/SDWebImage)** and
 - ✅ Customizable authorization headers.
 - ✅ Priority-based image loading.
 - ✅ Preloading for instant display.
-- ✅ Full GIF and **AVIF support**.
+- ✅ Full GIF, SVG and **AVIF support**.
 - ✅ Support for `borderRadius`.
 - ✅ Support for Fabric Renderer (v8.7.0+).
 - ✅ Support for TurboModules (v8.8.0+).
