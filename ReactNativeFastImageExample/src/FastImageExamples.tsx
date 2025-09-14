@@ -13,6 +13,7 @@ import {TintColorExample} from './TintColorExample';
 import {LocalImagesExample} from './LocalImagesExample';
 import {AutoSizeExample} from './AutoSizeExample';
 import {AvifExample} from './AvifExample';
+import {SvgExample} from './SvgExample';
 
 const FastImageExample = () => (
   <View style={styles.container}>
@@ -31,6 +32,7 @@ const FastImageExample = () => (
         </Section>
         <PriorityExample />
         <GifExample />
+        <SvgExample />
         <BorderRadiusExample />
         <ProgressExample />
         <PreloadExample />
