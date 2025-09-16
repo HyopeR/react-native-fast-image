@@ -14,6 +14,7 @@ import {LocalImagesExample} from './LocalImagesExample';
 import {AutoSizeExample} from './AutoSizeExample';
 import {AvifExample} from './AvifExample';
 import {SvgExample} from './SvgExample';
+import {TransitionExample} from './TransitionExample';
 
 const FastImageExample = () => (
   <View style={styles.container}>
@@ -37,6 +38,7 @@ const FastImageExample = () => (
         <ProgressExample />
         <PreloadExample />
         <ResizeModeExample />
+        <TransitionExample />
         <TintColorExample />
         <LocalImagesExample />
         <AutoSizeExample />
