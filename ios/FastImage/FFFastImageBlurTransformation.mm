@@ -13,35 +13,36 @@
 
 - (UIImage *)transform:(UIImage *)image {
     CIContext *context = [CIContext contextWithOptions:nil];
+
     CIImage *input = [CIImage imageWithCGImage:image.CGImage];
 
-    CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur"];
-    [filter setValue:input forKey:kCIInputImageKey];
-    [filter setValue:@(_radius) forKey:kCIInputRadiusKey];
-    CIImage *output = filter.outputImage;
+    CIFilter *clampFilter = [CIFilter filterWithName:@"CIAffineClamp"];
+    [clampFilter setValue:input forKey:kCIInputImageKey];
+    [clampFilter setValue:[NSValue valueWithCGAffineTransform:CGAffineTransformIdentity] forKey:@"inputTransform"];
+    CIImage *clampedImage = clampFilter.outputImage;
 
-    if (output) {
-        CGFloat w = image.size.width;
-        CGFloat h = image.size.height;
-        
-        // Crop edges to remove extra blur caused by the radius.
-        CGRect rect = CGRectMake(_radius * 2, _radius * 2, w - _radius * 4, h - _radius * 4);
-        CGImageRef outputRef = [context createCGImage:output fromRect:rect];
-        if (outputRef) {
-            UIImage *outputBlurred = [UIImage imageWithCGImage:outputRef];
-            CGImageRelease(outputRef);
-            return outputBlurred;
-        }
-    }
+    CGFloat blurScale = MIN(image.size.width, image.size.height) / 1000.0;
+    CGFloat blurRadius = _radius * blurScale;
+    CIFilter *blurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
+    [blurFilter setValue:clampedImage forKey:kCIInputImageKey];
+    [blurFilter setValue:@(blurRadius) forKey:kCIInputRadiusKey];
 
-    return image;
+    CIImage *output = [[blurFilter outputImage] imageByCroppingToRect:[input extent]];
+    if (!output) return image;
+
+    CGImageRef outputRef = [context createCGImage:output fromRect:[output extent]];
+    if (!outputRef) return image;
+
+    UIImage *outputBlurred = [UIImage imageWithCGImage:outputRef scale:image.scale orientation:image.imageOrientation];
+    CGImageRelease(outputRef);
+    return outputBlurred;
 }
 
 // Clamp user-provided radius to 0.1–10.
-// Then scale to a maximum of 25 for the blur effect.
+// Then scale to a maximum of 30 for the blur effect.
 - (CGFloat)normalizeBlurRadius:(CGFloat)radius {
     CGFloat clamped = fmax(0.1, fmin(radius, 10.0));
-    return fmin(25.0, ((clamped / 10.0) * 25.0) / 2.5);
+    return fmin(30.0, (clamped / 10.0) * 30.0);
 }
 
 @end
