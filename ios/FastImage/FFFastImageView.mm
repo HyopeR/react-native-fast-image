@@ -1,4 +1,5 @@
 #import "FFFastImageView.h"
+#import "FFFastImageBlurTransformation.h"
 #import <SDWebImage/UIImage+MultiFormat.h>
 #import <SDWebImage/UIView+WebCache.h>
 #import <SDWebImageAVIFCoder/SDImageAVIFCoder.h>
@@ -15,10 +16,13 @@
 
 @property(nonatomic, strong) NSDictionary* onLoadEvent;
 
+@property(nonatomic, strong) NSDictionary *lastErrorEvent;
+
 @end
 
 @implementation FFFastImageView
 
+static NSString * const kFFFastImageDefaultErrorMessage = @"Load failed";
 
 
 - (void)onLoadEventSend:(UIImage *)image {
@@ -83,30 +87,49 @@
 #endif
 }
 
-- (void)onErrorEvent {
+- (void)onErrorEvent:(NSError *)error {
+
+    NSString *msg = error.localizedDescription ?: kFFFastImageDefaultErrorMessage;
+    NSDictionary *event = @{ @"error": msg };
+    self.lastErrorEvent = event;
+
     #ifdef RCT_NEW_ARCH_ENABLED
         if (_eventEmitter != nullptr) {
             std::dynamic_pointer_cast<const facebook::react::FastImageViewEventEmitter>(_eventEmitter)
-            ->onFastImageError(facebook::react::FastImageViewEventEmitter::OnFastImageError{});
+            ->onFastImageError(facebook::react::FastImageViewEventEmitter::OnFastImageError{.error = static_cast<std::string>([error.localizedDescription UTF8String])});
         }
     #else
         if (self.onFastImageError) {
-            self.onFastImageError(@{});
+            self.onFastImageError(@{
+                    @"error": error.localizedDescription ?: kFFFastImageDefaultErrorMessage
+                }
+            );
         }
     #endif
 }
 
 
-
-
-
-- (id) init {
-    self = [super init];
+- (void)commonInitUtils {
     self.resizeMode = RCTResizeModeCover;
     self.clipsToBounds = YES;
+    [[SDImageCodersManager sharedManager] addCoder:[SDImageAVIFCoder sharedCoder]];
+    [[SDImageCodersManager sharedManager] addCoder:[SDImageWebPCoder sharedCoder]];
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+//     Called on new arch from FFFastImageComponentView
+    self = [super initWithFrame:frame];
     if (self) {
-       [[SDImageCodersManager sharedManager] addCoder:[SDImageAVIFCoder sharedCoder]];
-       [[SDImageCodersManager sharedManager] addCoder:[SDImageWebPCoder sharedCoder]];
+        [self commonInitUtils];
+    }
+    return self;
+}
+
+- (id) init {
+//     Called on old arch from FFFastImageViewManager
+    self = [super init];
+    if (self) {
+        [self commonInitUtils];
     }
     return self;
 }
@@ -135,7 +158,7 @@
 - (void) setOnFastImageError: (RCTDirectEventBlock)onFastImageError {
     _onFastImageError = onFastImageError;
     if (self.hasErrored && _onFastImageError) {
-        _onFastImageError(@{});
+        _onFastImageError(self.lastErrorEvent ?: @{ @"error": kFFFastImageDefaultErrorMessage});
     }
 }
 
@@ -180,10 +203,9 @@
 
 - (void) setImage: (UIImage*)image {
     if (_blurRadius && _blurRadius > 0) {
-        UIImage *blurImage = [self blurImage: image withRadius: _blurRadius];
-        if (blurImage) {
-            image = blurImage;
-        }
+        FFFastImageBlurTransformation *transformation =
+            [[FFFastImageBlurTransformation alloc] initWithRadius:_blurRadius];
+        image = [transformation transform:image];
     }
 
     if (self.imageColor != nil) {
@@ -283,6 +305,10 @@
 
 - (void) downloadImage: (FFFastImageSource*)source options: (SDWebImageOptions)options context: (SDWebImageContext*)context {
     __weak FFFastImageView *weakSelf = self; // Always use a weak reference to self in blocks
+    // transition: default to none; enable fade if requested
+    if (self.transition && [self.transition isEqualToString:@"fade"]) {
+        self.sd_imageTransition = SDWebImageTransition.fadeTransition;
+    }
     [self sd_setImageWithURL: _source.url
             placeholderImage: _defaultSource
                      options: options
@@ -295,7 +321,7 @@
                     NSURL* _Nullable imageURL) {
                 if (error) {
                     weakSelf.hasErrored = YES;
-                    [weakSelf onErrorEvent];
+                    [weakSelf onErrorEvent:error];
 
                     [weakSelf onLoadEndEvent];
                 } else {
@@ -304,29 +330,6 @@
                     [weakSelf onLoadEndEvent];
                 }
             }];
-}
-
-- (UIImage *)blurImage:(UIImage *)image withRadius:(CGFloat)radius {
-    CIContext *context = [CIContext contextWithOptions:nil];
-    CIImage *inputImage = [CIImage imageWithCGImage:image.CGImage];
-
-    CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur"];
-    [filter setValue:inputImage forKey:kCIInputImageKey];
-    [filter setValue:[NSNumber numberWithFloat:radius] forKey:kCIInputRadiusKey];
-    CIImage *outputImage = [filter valueForKey:kCIOutputImageKey];
-
-    if (outputImage) {
-        CGRect rect = CGRectMake(radius * 2, radius * 2, image.size.width - radius * 4, image.size.height - radius * 4);
-        CGImageRef outputImageRef = [context createCGImage:outputImage fromRect:rect];
-
-        if (outputImageRef) {
-            UIImage *blurImage = [UIImage imageWithCGImage:outputImageRef];
-            CGImageRelease(outputImageRef);
-            return blurImage;
-        }
-    }
-
-    return nil;
 }
 
 - (void) dealloc {

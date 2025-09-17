@@ -1,7 +1,5 @@
 package com.dylanvann.fastimage;
 
-import static com.dylanvann.fastimage.FastImageRequestListener.REACT_ON_ERROR_EVENT;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -14,6 +12,7 @@ import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.request.Request;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.facebook.react.bridge.ReadableMap;
 import com.dylanvann.fastimage.events.FastImageErrorEvent;
@@ -27,6 +26,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import android.util.Log;
 
 class FastImageViewWithUrl extends AppCompatImageView {
@@ -36,6 +36,7 @@ class FastImageViewWithUrl extends AppCompatImageView {
     private Drawable mDefaultSource = null;
     private Integer mBlurRadius = 0;
     public GlideUrl glideUrl;
+    private String mTransition = "none"; // "none" | "fade"
 
     public FastImageViewWithUrl(Context context) {
         super(context);
@@ -51,6 +52,15 @@ class FastImageViewWithUrl extends AppCompatImageView {
         mDefaultSource = source;
     }
 
+    public void setTransition(@Nullable String transition) {
+        mNeedsReload = true;
+        if (transition == null) {
+            mTransition = "none";
+        } else {
+            mTransition = transition;
+        }
+    }
+  
     public void setBlurRadius(@Nullable Integer blurRadius) {
         mNeedsReload = true;
         mBlurRadius = blurRadius;
@@ -153,30 +163,22 @@ class FastImageViewWithUrl extends AppCompatImageView {
             RequestBuilder<? extends Drawable> builder;
             Map<String, Object> builderOptions = new HashMap<>();
             builderOptions.put("blurRadius", mBlurRadius);
+            builderOptions.put("view", this);
 
             try {
-                String extension = FastImageUrlUtils.getFileExtensionFromUrl(imageSource.getUri().toString());
-
-                if ("gif".equals(extension)) {
-                    builder = requestManager
-                            .asGif()
-                            .load(imageSource == null ? null : imageSource.getSourceForLoad())
-                            .apply(FastImageViewConverter
-                                    .getOptions(context, imageSource, mSource, builderOptions)
-                                    .placeholder(mDefaultSource)
-                                    .fallback(mDefaultSource))
-                            .listener(new FastImageRequestListener<GifDrawable>(key));
-                } else {
-                    builder = requestManager
-                            .load(imageSource == null ? null : imageSource.getSourceForLoad())
-                            .apply(FastImageViewConverter
-                                    .getOptions(context, imageSource, mSource, builderOptions)
-                                    .placeholder(mDefaultSource) // show until loaded
-                                    .fallback(mDefaultSource)); // null will not be treated as error
-                }
+                builder = requestManager
+                        .load(imageSource == null ? null : imageSource.getSourceForLoad())
+                        .apply(FastImageViewConverter
+                                .getOptions(context, imageSource, mSource, builderOptions)
+                                .placeholder(mDefaultSource) // show until loaded
+                                .fallback(mDefaultSource)); // null will not be treated as error
 
                 if (key != null) {
                     builder.listener(new FastImageRequestListener(key));
+                }
+
+                if ("fade".equals(mTransition)) {
+                    builder = builder.transition(DrawableTransitionOptions.withCrossFade());
                 }
 
                 builder.into(this);

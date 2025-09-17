@@ -125,25 +125,26 @@ If using [ProGuard](https://www.guardsquare.com/proguard), add these rules to `a
 
 ### Properties
 
-| Property          | Type                               | Description                                                                                                                                                                     |
-|-------------------|------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `source`          | `object`                           | Source for the remote image. Accepts an object with sub-properties like `uri`, `headers`, `priority`, and `cache`.                                                              |
-| `source.uri`      | `string`                           | The URL to load the image from. e.g., `"https://unsplash.it/400/400?image=1"`.                                                                                                  |
-| `source.headers`  | `object`                           | Headers to load the image with, e.g., `{ Authorization: "someAuthToken" }`.                                                                                                     |
-| `source.priority` | `FastImage.priority`               | Load priority: <br> - `FastImage.priority.low` <br> - `FastImage.priority.normal` **(Default)** <br> - `FastImage.priority.high`                                                |
-| `source.cache`    | `FastImage.cacheControl`           | Cache control: <br> - `FastImage.cacheControl.immutable` **(Default)** <br> - `FastImage.cacheControl.web` <br> - `FastImage.cacheControl.cacheOnly`                            |
-| `defaultSource`   | `number`                           | An asset loaded with `require()` or `import`. Note: on Android, `defaultSource` does not work in debug mode.                                                                    |
-| `resizeMode`      | `FastImage.resizeMode`             | Resize mode: <br> - `FastImage.resizeMode.contain` <br> - `FastImage.resizeMode.cover` **(Default)** <br> - `FastImage.resizeMode.stretch` <br> - `FastImage.resizeMode.center` |
-| `onLoadStart`     | `function`                         | Callback when the image starts to load.                                                                                                                                         |
-| `onProgress`      | `(event: OnProgressEvent) => void` | Callback when the image is loading, with `event.nativeEvent.loaded` and `event.nativeEvent.total` bytes.                                                                        |
-| `onLoad`          | `(event: OnLoadEvent) => void`     | Callback when the image is successfully loaded, with `event.nativeEvent.width` and `event.nativeEvent.height` values.                                                           |
-| `onError`         | `function`                         | Callback when an error occurs in loading the image or the source is malformed (empty or `null`).                                                                                |
-| `onLoadEnd`       | `function`                         | Callback when the image finishes loading, regardless of success or failure.                                                                                                     |
-| `style`           | `ViewStyle`                        | Style for the image component, supports `borderRadius`.                                                                                                                         |
-| `fallback`        | `boolean`                          | If `true`, it will fall back to using `Image`. This still applies styles and layout as with `FastImage`.                                                                        |
-| `tintColor`       | `number` or `string`               | Color tint for all non-transparent pixels in the image.                                                                                                                         |
-| `blurRadius`      | `number`                           | Parameter for adjusting the blur in the image.                                                                                                                                  |
-| `testID`          | `string`                           | Optional ID for testing, such as with [`react-test-renderer`](https://www.npmjs.com/package/react-test-renderer).                                                               |
+| Property               | Type                       | Description                                                                                                                                                                                                                                             |
+|------------------------|----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `source`               | `object`                   | Source for the remote image. Accepts an object with sub-properties like `uri`, `headers`, `priority`, and `cache`.                                                                                                                                      |
+| `source.uri`           | `string`                   | The URL to load the image from. e.g., `"https://unsplash.it/400/400?image=1"`.                                                                                                                                                                          |
+| `source.headers`       | `object`                   | Headers to load the image with, e.g., `{ Authorization: "someAuthToken" }`.                                                                                                                                                                             |
+| `source.priority`      | `FastImage.priority`       | Load priority: <br> - `FastImage.priority.low` <br> - `FastImage.priority.normal` **(Default)** <br> - `FastImage.priority.high`                                                                                                                        |
+| `source.cache`         | `FastImage.cacheControl`   | Cache control: <br> - `FastImage.cacheControl.immutable` **(Default)** <br> - `FastImage.cacheControl.web` <br> - `FastImage.cacheControl.cacheOnly`                                                                                                     |
+| `defaultSource`        | `number`                   | An asset loaded with `require()` or `import`. Note: on Android, `defaultSource` does not work in debug mode.                                                                                                                                            |
+| `resizeMode`           | `FastImage.resizeMode`     | Resize mode: <br> - `FastImage.resizeMode.contain` <br> - `FastImage.resizeMode.cover` **(Default)** <br> - `FastImage.resizeMode.stretch` <br> - `FastImage.resizeMode.center`                                  |
+| `transition`           | `FastImage.transition`     | transition applied when displaying the image: <br> - `FastImage.transition.none` **(Default)** <br> - `FastImage.transition.fade` (React Native Image equivalent)  |
+| `onLoadStart`          | `function`                 | Callback when the image starts to load.                                                                                                                                                                                                                 |
+| `onProgress`           | `(event: OnProgressEvent) => void` | Callback when the image is loading, with `event.nativeEvent.loaded` and `event.nativeEvent.total` bytes.                                                                                                         |
+| `onLoad`               | `(event: OnLoadEvent) => void` | Callback when the image is successfully loaded, with `event.nativeEvent.width` and `event.nativeEvent.height` values.                                                                                           |
+| `onError`              | `(event: OnErrorEvent) => void`| Callback when an error occurs in loading the image or the source is malformed, with `event.nativeEvent.error`.                                                                                                                 |
+| `onLoadEnd`            | `function`                 | Callback when the image finishes loading, regardless of success or failure.                                                                                                                                       |
+| `style`                | `ViewStyle`                | Style for the image component, supports `borderRadius`.                                                                                                                                                          |
+| `fallback`             | `boolean`                  | If `true`, it will fall back to using `Image`. This still applies styles and layout as with `FastImage`.                                                                                                         |
+| `tintColor`            | `number` or `string`          | Color tint for all non-transparent pixels in the image.                                                                                                                                                          |
+| `blurRadius`           | `number`                           | Parameter for adjusting the blur in the image.      
+| `testID`               | `string`                   | Optional ID for testing, such as with [`react-test-renderer`](https://www.npmjs.com/package/react-test-renderer).                                                                                                |
 
 ### Static Methods
 
@@ -152,6 +153,10 @@ If using [ProGuard](https://www.guardsquare.com/proguard), add these rules to `a
 | `FastImage.preload(sources: object[])`        | Preloads images for faster display when they are rendered. <br> Example: `FastImage.preload([{ uri: "https://unsplash.it/400/400?image=1" }])`. |
 | `FastImage.clearMemoryCache(): Promise<void>` | Clears all images from the memory cache.                                                                 |
 | `FastImage.clearDiskCache(): Promise<void>`   | Clears all images from the disk cache.                                                                   |
+
+## 👥 Contributing
+
+We welcome contributions to improve FastImage! Please check out our [contributing guide](CONTRIBUTING.md) for guidelines on how to proceed.
 
 ## 🛠️ Troubleshooting
 
@@ -179,7 +184,7 @@ Special thanks to:
 [build]: https://github.com/dream-sports-labs/react-native-fast-image/actions?query=workflow%3ACI
 [coverage-badge]: https://img.shields.io/codecov/c/github/dream-sports-labs/react-native-fast-image.svg
 [coverage]: https://codecov.io/github/dream-sports-labs/react-native-fast-image
-[downloads-badge]: https://img.shields.io/npm/dm/react-native-fast-image.svg
+[downloads-badge]: https://img.shields.io/npm/dm/@d11/react-native-fast-image.svg
 [npmtrends]: http://www.npmtrends.com/@d11/react-native-fast-image
 [package]: https://www.npmjs.com/package/@d11/react-native-fast-image
 [version-badge]: https://img.shields.io/npm/v/@d11/react-native-fast-image.svg
