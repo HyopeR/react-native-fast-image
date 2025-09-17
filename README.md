@@ -143,15 +143,16 @@ If using [ProGuard](https://www.guardsquare.com/proguard), add these rules to `a
 | `style`                | `ViewStyle`                | Style for the image component, supports `borderRadius`.                                                                                                                                                          |
 | `fallback`             | `boolean`                  | If `true`, it will fall back to using `Image`. This still applies styles and layout as with `FastImage`.                                                                                                         |
 | `tintColor`            | `number` or `string`          | Color tint for all non-transparent pixels in the image.                                                                                                                                                          |
+| `blurRadius`           | `number`                           | Parameter for adjusting the blur in the image.      
 | `testID`               | `string`                   | Optional ID for testing, such as with [`react-test-renderer`](https://www.npmjs.com/package/react-test-renderer).                                                                                                |
 
 ### Static Methods
 
-| Method                           | Description                                                                                              |
-|----------------------------------|----------------------------------------------------------------------------------------------------------|
-| `FastImage.preload(sources: object[])`   | Preloads images for faster display when they are rendered. <br> Example: `FastImage.preload([{ uri: "https://unsplash.it/400/400?image=1" }])`. |
-| `FastImage.clearMemoryCache(): Promise<void>`   | Clears all images from the memory cache.                                                                 |
-| `FastImage.clearDiskCache(): Promise<void>`     | Clears all images from the disk cache.                                                                   |
+| Method                                        | Description                                                                                              |
+|-----------------------------------------------|----------------------------------------------------------------------------------------------------------|
+| `FastImage.preload(sources: object[])`        | Preloads images for faster display when they are rendered. <br> Example: `FastImage.preload([{ uri: "https://unsplash.it/400/400?image=1" }])`. |
+| `FastImage.clearMemoryCache(): Promise<void>` | Clears all images from the memory cache.                                                                 |
+| `FastImage.clearDiskCache(): Promise<void>`   | Clears all images from the disk cache.                                                                   |
 
 ## 👥 Contributing
 

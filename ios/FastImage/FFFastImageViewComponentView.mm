@@ -113,6 +113,7 @@ using namespace facebook::react;
             break;
     }
     fastImageView.transition = transition;
+    fastImageView.blurRadius = newViewProps.blurRadius;
 
     [super updateProps:props oldProps:oldProps];
     // this method decides whether to reload the image based on changed props

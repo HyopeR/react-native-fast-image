@@ -21,6 +21,7 @@ RCT_EXPORT_VIEW_PROPERTY(onFastImageLoad, RCTDirectEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onFastImageLoadEnd, RCTDirectEventBlock)
 RCT_REMAP_VIEW_PROPERTY(tintColor, imageColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(transition, NSString)
+RCT_EXPORT_VIEW_PROPERTY(blurRadius, CGFloat)
 
 @end
 
