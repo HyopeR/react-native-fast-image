@@ -1,4 +1,4 @@
-package com.dylanvann.fastimage.svg;
+package com.fastimage.svg;
 
 import static com.bumptech.glide.request.target.Target.SIZE_ORIGINAL;
 

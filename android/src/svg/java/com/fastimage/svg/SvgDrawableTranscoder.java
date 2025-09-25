@@ -1,4 +1,4 @@
-package com.dylanvann.fastimage.svg;
+package com.fastimage.svg;
 
 import android.graphics.Picture;
 import android.graphics.drawable.PictureDrawable;
