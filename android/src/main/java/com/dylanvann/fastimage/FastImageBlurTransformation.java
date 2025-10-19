@@ -83,9 +83,9 @@ public class FastImageBlurTransformation extends BitmapTransformation {
             Bitmap.Config config = src.getConfig() != null ? src.getConfig() : Bitmap.Config.ARGB_8888;
             Bitmap bitmap = src.copy(config, true);
 
-            float radiusAdjust = normalizeBlurRadiusForRenderEffect(bitmap, radius);
+            float normalizedRadius = normalizeBlurRadiusForRenderEffect(bitmap, radius);
 
-            RenderEffect blur = RenderEffect.createBlurEffect(radiusAdjust, radiusAdjust, Shader.TileMode.CLAMP);
+            RenderEffect blur = RenderEffect.createBlurEffect(normalizedRadius, normalizedRadius, Shader.TileMode.CLAMP);
             view.setRenderEffect(blur);
             view.invalidate();
         }
