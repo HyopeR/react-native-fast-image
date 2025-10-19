@@ -21,6 +21,11 @@ import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 
 public class FastImageBlurTransformation extends BitmapTransformation {
+    private static final float BLUR_MIN_INPUT = 0.1f;
+    private static final float BLUR_MAX_INPUT = 10f;
+    private static final float BLUR_MAX_SCALE = 25f;
+    private static final float RENDER_EFFECT_REFERENCE_WIDTH = 1080f;
+    private static final float RENDER_EFFECT_BLUR_MAX_SCALE = 200f;
 
     private static final String ID = "com.dylanvann.fastimage.FastImageBlurTransformation";
     private static final byte[] ID_BYTES = ID.getBytes(CHARSET);
@@ -35,9 +40,11 @@ public class FastImageBlurTransformation extends BitmapTransformation {
         this.view = view;
     }
 
-    // For Android API >= 31, blur is applied using RenderEffect directly on the View.
-    // For Android API < 31, blur is applied using RenderScript on the Bitmap.
-    // This ensures compatibility with both legacy and future Android versions.
+    /**
+     * For Android API >= 31, blur is applied using RenderEffect directly on the View.
+     * For Android API < 31, blur is applied using RenderScript on the Bitmap.
+     * This ensures compatibility with both legacy and future Android versions.
+     */
     @Override
     protected Bitmap transform(@NonNull BitmapPool pool, @NonNull Bitmap toTransform, int outWidth, int outHeight) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -73,7 +80,13 @@ public class FastImageBlurTransformation extends BitmapTransformation {
 
     private Bitmap blurWithRenderEffect(Context context, Bitmap src, float radius, AppCompatImageView view) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            view.setRenderEffect(RenderEffect.createBlurEffect(radius, radius, Shader.TileMode.CLAMP));
+            Bitmap.Config config = src.getConfig() != null ? src.getConfig() : Bitmap.Config.ARGB_8888;
+            Bitmap bitmap = src.copy(config, true);
+
+            float radiusAdjust = normalizeBlurRadiusForRenderEffect(bitmap, radius);
+
+            RenderEffect blur = RenderEffect.createBlurEffect(radiusAdjust, radiusAdjust, Shader.TileMode.CLAMP);
+            view.setRenderEffect(blur);
             view.invalidate();
         }
 
@@ -113,10 +126,24 @@ public class FastImageBlurTransformation extends BitmapTransformation {
         return bitmap;
     }
 
-    // Clamp user-provided radius to 0.1–10.
-    // Then scale to a maximum of 25 for the blur effect.
+    /**
+     * Clamp user-provided radius to 0.1–10.
+     * Then scale to a maximum of 25 for the blur script.
+     */
     private float normalizeBlurRadius(float radius) {
-        float clamped = Math.min(10f, Math.max(0.1f, radius));
-        return Math.min(25f, (clamped / 10f) * 25f);
+        float clamped = Math.min(BLUR_MAX_INPUT, Math.max(BLUR_MIN_INPUT, radius));
+        return (clamped / BLUR_MAX_INPUT) * BLUR_MAX_SCALE;
+    }
+
+    /**
+     * Using RenderEffect with blurRadius should increase or decrease depending on the size.
+     * Normalization is used to ensure a similar appearance at all sizes.
+     */
+    private float normalizeBlurRadiusForRenderEffect(Bitmap bitmap, float radius) {
+        float imageWidth = bitmap.getWidth();
+        float imageScale = imageWidth / RENDER_EFFECT_REFERENCE_WIDTH;
+        float imageAdjust = radius * imageScale;
+
+        return Math.max(BLUR_MIN_INPUT, Math.min(RENDER_EFFECT_BLUR_MAX_SCALE, imageAdjust));
     }
 }
