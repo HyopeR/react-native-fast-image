@@ -2,9 +2,7 @@
 #import <CoreImage/CoreImage.h>
 
 static const CGFloat BLUR_MIN_INPUT = 0.1;
-static const CGFloat BLUR_MAX_INPUT = 10.0;
-static const CGFloat BLUR_MAX_SCALE = 25.0;
-static const CGFloat BLUR_MULTIPLIER = 1.5;
+static const CGFloat BLUR_MAX_INPUT = 200.0;
 
 @implementation FFFastImageBlurTransformation
 
@@ -41,14 +39,8 @@ static const CGFloat BLUR_MULTIPLIER = 1.5;
     return outputBlurred;
 }
 
-/**
-* Clamp user-provided radius to 0.1–10.
-* Then scale to a maximum of 25 for the blur script.
-*/
 - (CGFloat)normalizeBlurRadius:(CGFloat)radius {
-    CGFloat clamped = fmax(BLUR_MIN_INPUT, fmin(radius, BLUR_MAX_INPUT));
-    CGFloat base = (clamped / BLUR_MAX_INPUT) * BLUR_MAX_SCALE;
-    return base * BLUR_MULTIPLIER;
+    return fmax(BLUR_MIN_INPUT, fmin(radius, BLUR_MAX_INPUT));
 }
 
 @end
