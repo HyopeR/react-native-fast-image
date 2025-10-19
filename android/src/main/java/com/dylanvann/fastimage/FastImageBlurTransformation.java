@@ -9,10 +9,10 @@ import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageView;
 
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
@@ -32,9 +32,9 @@ public class FastImageBlurTransformation extends BitmapTransformation {
 
     private final Context context;
     private final float radius;
-    private final AppCompatImageView view;
+    private final ImageView view;
 
-    public FastImageBlurTransformation(@NonNull Context context, float radius, AppCompatImageView view) {
+    public FastImageBlurTransformation(@NonNull Context context, float radius, ImageView view) {
         this.context = context.getApplicationContext();
         this.radius = normalizeBlurRadius(radius);
         this.view = view;
@@ -78,7 +78,7 @@ public class FastImageBlurTransformation extends BitmapTransformation {
         messageDigest.update(ByteBuffer.allocate(4).putFloat(radius).array());
     }
 
-    private Bitmap blurWithRenderEffect(Context context, Bitmap src, float radius, AppCompatImageView view) {
+    private Bitmap blurWithRenderEffect(Context context, Bitmap src, float radius, ImageView view) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             Bitmap.Config config = src.getConfig() != null ? src.getConfig() : Bitmap.Config.ARGB_8888;
             Bitmap bitmap = src.copy(config, true);
