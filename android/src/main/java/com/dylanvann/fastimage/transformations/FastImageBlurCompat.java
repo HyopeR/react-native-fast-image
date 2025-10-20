@@ -1,4 +1,4 @@
-package com.dylanvann.fastimage.blur;
+package com.dylanvann.fastimage.transformations;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,9 +13,9 @@ public class FastImageBlurCompat {
      */
     public static Bitmap blur(Context context, Bitmap bitmap, float radius, ImageView view) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            return FastImageRenderEffectEngine.apply(bitmap, radius, view);
+            return FastImageBlurEffectEngine.apply(bitmap, radius, view);
         } else {
-            return FastImageRenderScriptEngine.apply(bitmap, radius, context);
+            return FastImageBlurScriptEngine.apply(bitmap, radius, context);
         }
     }
 }

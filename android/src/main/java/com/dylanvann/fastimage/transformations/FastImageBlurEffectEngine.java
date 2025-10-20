@@ -1,4 +1,4 @@
-package com.dylanvann.fastimage.blur;
+package com.dylanvann.fastimage.transformations;
 
 import android.graphics.Bitmap;
 import android.graphics.RenderEffect;
@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import androidx.annotation.RequiresApi;
 
 @RequiresApi(31)
-public class FastImageRenderEffectEngine {
+public class FastImageBlurEffectEngine {
     private static final float BLUR_REFERENCE_SIZE = 540f;
     private static final float BLUR_MIN_INPUT = 0.1F;
     private static final float BLUR_MAX_INPUT = 200f;
