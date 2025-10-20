@@ -20,14 +20,14 @@ export const BlurRadiusExample = () => {
         </View>
 
         <View style={styles.imageField}>
-          <FastImage style={styles.image} source={FieldsImage} blurRadius={5} />
+          <FastImage style={styles.image} source={FieldsImage} blurRadius={10} />
         </View>
 
         <View style={styles.imageField}>
           <FastImage
             style={styles.image}
             source={FieldsImage}
-            blurRadius={15}
+            blurRadius={30}
           />
         </View>
       </SectionFlex>
