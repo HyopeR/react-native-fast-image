@@ -16,7 +16,7 @@ import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 
 public class FastImageBlurTransformation extends BitmapTransformation {
-    private static final float BLUR_MIN_INPUT = 0.1f;
+    private static final float BLUR_MIN_INPUT = 0f;
     private static final float BLUR_MAX_INPUT = 200f;
 
     private static final String ID = "com.dylanvann.fastimage.FastImageBlurTransformation";

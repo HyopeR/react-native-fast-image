@@ -33,7 +33,7 @@ class FastImageViewWithUrl extends AppCompatImageView {
     private boolean mNeedsReload = false;
     private ReadableMap mSource = null;
     private Drawable mDefaultSource = null;
-    private Integer mBlurRadius = 0;
+    private Integer mBlurRadius = null;
     public GlideUrl glideUrl;
 
     public FastImageViewWithUrl(Context context) {

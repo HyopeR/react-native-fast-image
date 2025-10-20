@@ -1,7 +1,7 @@
 #import "FFFastImageBlurTransformation.h"
 #import <CoreImage/CoreImage.h>
 
-static const CGFloat BLUR_MIN_INPUT = 0.1;
+static const CGFloat BLUR_MIN_INPUT = 0.0;
 static const CGFloat BLUR_MAX_INPUT = 200.0;
 
 @implementation FFFastImageBlurTransformation

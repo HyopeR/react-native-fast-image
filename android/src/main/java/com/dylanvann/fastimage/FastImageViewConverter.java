@@ -143,11 +143,13 @@ class FastImageViewConverter {
                 .placeholder(TRANSPARENT_DRAWABLE);
 
         int blurRadius = 0;
+        boolean blurRadiusExist = false;
         ImageView view = null;
 
         if (imageOptions != null) {
             Object blurRadiusValue = imageOptions.get("blurRadius");
             if (blurRadiusValue instanceof Number) {
+                blurRadiusExist = true;
                 blurRadius = ((Number) blurRadiusValue).intValue();
             }
 
@@ -157,7 +159,7 @@ class FastImageViewConverter {
             }
         }
 
-        if (blurRadius > 0) {
+        if (blurRadiusExist) {
             options = options.transform(new FastImageBlurTransformation(context, blurRadius, view));
         }
 
