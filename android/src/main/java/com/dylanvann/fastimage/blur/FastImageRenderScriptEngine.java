@@ -9,7 +9,7 @@ import android.renderscript.ScriptIntrinsicBlur;
 
 @SuppressWarnings("deprecation")
 public class FastImageRenderScriptEngine {
-    private static final float BLUR_REFERENCE_WIDTH = 540f;
+    private static final float BLUR_REFERENCE_SIZE = 540f;
     private static final float BLUR_MIN_SCALE = 0.1f;
     private static final float BLUR_MAX_SCALE = 1.5F;
     private static final float BLUR_LIMIT_APPLICABLE_AT_ONCE = 25f;
@@ -18,9 +18,13 @@ public class FastImageRenderScriptEngine {
      * Gradual blur is applied to achieve a RenderEffect-like blur.
      */
     public static Bitmap apply(Bitmap src, float radius, Context context) {
-        // Blur is diluted or increased in proportion to the image size.
-        float scale = BLUR_REFERENCE_WIDTH / src.getWidth();
+        // If the image is small, the blur will be more effective.
+        // By scaling it down, the blur effect is intensified.
+        float scaleX = BLUR_REFERENCE_SIZE / src.getWidth();
+        float scaleY = BLUR_REFERENCE_SIZE / src.getHeight();
+        float scale = (scaleX + scaleY) / 2;
         float scaleNormalized = Math.min(BLUR_MAX_SCALE, Math.max(BLUR_MIN_SCALE, scale));
+
         int width = (int) (src.getWidth() * scaleNormalized);
         int height = (int) (src.getHeight() * scaleNormalized);
         Bitmap bitmap = Bitmap.createScaledBitmap(src, width, height, true);
