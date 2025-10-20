@@ -9,8 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 
-import androidx.appcompat.widget.AppCompatImageView;
-
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.model.Headers;
@@ -145,21 +143,23 @@ class FastImageViewConverter {
                 .placeholder(TRANSPARENT_DRAWABLE);
 
         int blurRadius = 0;
-        AppCompatImageView view = null;
+        boolean blurRadiusExist = false;
+        ImageView view = null;
 
         if (imageOptions != null) {
             Object blurRadiusValue = imageOptions.get("blurRadius");
             if (blurRadiusValue instanceof Number) {
+                blurRadiusExist = true;
                 blurRadius = ((Number) blurRadiusValue).intValue();
             }
 
             Object viewValue = imageOptions.get("view");
-            if (viewValue instanceof AppCompatImageView) {
-                view = (AppCompatImageView) viewValue;
+            if (viewValue instanceof ImageView) {
+                view = (ImageView) viewValue;
             }
         }
 
-        if (blurRadius > 0) {
+        if (blurRadiusExist) {
             options = options.transform(new FastImageBlurTransformation(context, blurRadius, view));
         }
 
