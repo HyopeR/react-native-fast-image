@@ -12,14 +12,17 @@ public class FastImageBlurEffectEngine {
     private static final float BLUR_REFERENCE_SIZE = 540f;
     private static final float BLUR_MIN_INPUT = 0.1F;
     private static final float BLUR_MAX_INPUT = 200f;
+    private static final int SOURCE_TAG_ID = 0xcafebabe;
+    private static final int RADIUS_TAG_ID = 0xbabecafe;
     private static final int LISTENER_TAG_ID = 0xdeadbeef;
-    private static final int BITMAP_TAG_ID = 0xcafebabe;
 
     /**
      * Scales the image and blurs it with RenderEffect.
      */
     public static Bitmap apply(Bitmap src, float radius, ImageView view) {
-        ensureDynamicApply(src, radius, view);
+        view.setTag(SOURCE_TAG_ID, src);
+        view.setTag(RADIUS_TAG_ID, radius);
+        ensureDynamicApply(view);
 
         float scaleFactorX = src.getWidth() / BLUR_REFERENCE_SIZE;
         float scaleFactorY = src.getHeight() / BLUR_REFERENCE_SIZE;
@@ -46,20 +49,22 @@ public class FastImageBlurEffectEngine {
      * RenderEffect only applies the blur effect to the View layer.
      * It must be reapplied when the dimensions change.
      */
-    private static void ensureDynamicApply(Bitmap src, float radius, ImageView view) {
+    private static void ensureDynamicApply(ImageView view) {
         Object tag = view.getTag(LISTENER_TAG_ID);
         if (tag instanceof Boolean && (Boolean) tag) return;
 
-        view.setTag(BITMAP_TAG_ID, src);
         view.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
-            if (right - left != oldRight - oldLeft || bottom - top != oldBottom - oldTop) {
-                Object bitmapTag = view.getTag(BITMAP_TAG_ID);
-                if (bitmapTag instanceof Bitmap originalBitmap) {
-                    apply(originalBitmap, radius, view);
-                }
-            }
-        });
+            if (right - left == oldRight - oldLeft && bottom - top == oldBottom - oldTop) return;
 
+            Object srcTag = view.getTag(SOURCE_TAG_ID);
+            if (!(srcTag instanceof Bitmap src)) return;
+
+            Object radiusTag = view.getTag(RADIUS_TAG_ID);
+            if (!(radiusTag instanceof Number radiusNumber)) return;
+            float radius = radiusNumber.floatValue();
+
+            apply(src, radius, view);
+        });
         view.setTag(LISTENER_TAG_ID, true);
     }
 }
