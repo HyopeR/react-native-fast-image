@@ -1,4 +1,4 @@
-package com.dylanvann.fastimage.blur;
+package com.dylanvann.fastimage.transformations;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,7 +8,7 @@ import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 
 @SuppressWarnings("deprecation")
-public class FastImageRenderScriptEngine {
+public class FastImageBlurScriptEngine {
     private static final float BLUR_REFERENCE_SIZE = 540f;
     private static final float BLUR_MIN_SCALE = 0.1f;
     private static final float BLUR_MAX_SCALE = 1.5F;

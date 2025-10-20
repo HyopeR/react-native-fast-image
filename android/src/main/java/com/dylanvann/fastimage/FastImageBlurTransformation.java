@@ -10,7 +10,7 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
-import com.dylanvann.fastimage.blur.FastImageBlurCompat;
+import com.dylanvann.fastimage.transformations.FastImageBlurCompat;
 
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
