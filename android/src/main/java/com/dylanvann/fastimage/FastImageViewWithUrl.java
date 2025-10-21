@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.os.Build;
 import android.util.Log;
 
 class FastImageViewWithUrl extends AppCompatImageView {
@@ -33,7 +34,8 @@ class FastImageViewWithUrl extends AppCompatImageView {
     private boolean mNeedsReload = false;
     private ReadableMap mSource = null;
     private Drawable mDefaultSource = null;
-    private Integer mBlurRadius = null;
+    private Integer mBlurRadius = 0;
+    private Integer mLastBlurRadius = 0;
     public GlideUrl glideUrl;
 
     public FastImageViewWithUrl(Context context) {
@@ -52,7 +54,8 @@ class FastImageViewWithUrl extends AppCompatImageView {
 
     public void setBlurRadius(@Nullable Integer blurRadius) {
         mNeedsReload = true;
-        mBlurRadius = blurRadius;
+        mLastBlurRadius = mBlurRadius != null ? mBlurRadius : 0;
+        mBlurRadius = blurRadius != null ? blurRadius : 0;
     }
 
     private boolean isNullOrEmpty(final String url) {
@@ -161,6 +164,14 @@ class FastImageViewWithUrl extends AppCompatImageView {
                                 .getOptions(context, imageSource, mSource, builderOptions)
                                 .placeholder(mDefaultSource) // show until loaded
                                 .fallback(mDefaultSource)); // null will not be treated as error
+
+                // Cleans RenderEffect for BlurRadius Android API >= 31.
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (mBlurRadius <= 0 && mLastBlurRadius > 0) {
+                        this.setRenderEffect(null);
+                        this.invalidate();
+                    }
+                }
 
                 if (key != null) {
                     builder.listener(new FastImageRequestListener(key));

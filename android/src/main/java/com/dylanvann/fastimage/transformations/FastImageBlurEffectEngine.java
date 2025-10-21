@@ -67,9 +67,4 @@ public class FastImageBlurEffectEngine {
         });
         view.setTag(LISTENER_TAG_ID, true);
     }
-
-    public static void reset(ImageView view) {
-        view.setRenderEffect(null);
-        view.invalidate();
-    }
 }
