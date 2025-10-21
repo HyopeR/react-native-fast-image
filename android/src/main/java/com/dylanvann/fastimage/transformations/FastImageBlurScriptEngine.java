@@ -74,6 +74,4 @@ public class FastImageBlurScriptEngine {
 
         return bitmap;
     }
-
-    public static void reset() {}
 }

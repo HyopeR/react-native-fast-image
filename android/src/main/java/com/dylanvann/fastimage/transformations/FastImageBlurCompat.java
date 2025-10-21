@@ -13,18 +13,8 @@ public class FastImageBlurCompat {
      */
     public static Bitmap blur(Context context, Bitmap bitmap, float radius, ImageView view) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (radius <= 0) {
-                FastImageBlurEffectEngine.reset(view);
-                return bitmap;
-            }
-
             return FastImageBlurEffectEngine.apply(bitmap, radius, view);
         } else {
-            if (radius <= 0) {
-                FastImageBlurScriptEngine.reset();
-                return bitmap;
-            }
-
             return FastImageBlurScriptEngine.apply(bitmap, radius, context);
         }
     }
