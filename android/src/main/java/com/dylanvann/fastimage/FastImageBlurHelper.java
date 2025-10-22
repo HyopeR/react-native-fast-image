@@ -14,14 +14,14 @@ class FastImageBlurHelper {
 
         ImageView view = getImageView(imageOptions);
         int blurRadius = getInt(imageOptions.get("blurRadius"));
-        boolean blurShouldClean = getBoolean(imageOptions.get("blurRadiusShouldClean"));
+        boolean blurRadiusShouldClean = getBoolean(imageOptions.get("blurRadiusShouldClean"));
+
+        if (blurRadiusShouldClean) {
+            FastImageBlurTransformation.clean(view);
+        }
 
         if (blurRadius > 0) {
             return options.transform(new FastImageBlurTransformation(context, blurRadius, view));
-        }
-
-        if (blurShouldClean) {
-            FastImageBlurTransformation.clean(view);
         }
 
         return options;
