@@ -10,12 +10,17 @@ import type {
 type Headers = ReadonlyArray<Readonly<{ name: string; value: string }>>
 type Priority = WithDefault<'low' | 'normal' | 'high', 'normal'>
 type CacheControl = WithDefault<'immutable' | 'web' | 'cacheOnly', 'web'>
+type Transition = WithDefault<'fade' | 'none', 'none'>
 
 type FastImageSource = Readonly<{
     uri?: string
     headers?: Headers
     priority?: Priority
     cache?: CacheControl
+}>
+
+type OnErrorEvent = Readonly<{
+    error: string
 }>
 
 type OnLoadEvent = Readonly<{
@@ -29,7 +34,7 @@ type OnProgressEvent = Readonly<{
 }>
 
 interface NativeProps extends ViewProps {
-    onFastImageError?: BubblingEventHandler<Readonly<{}>>
+    onFastImageError?: BubblingEventHandler<OnErrorEvent>
     onFastImageLoad?: BubblingEventHandler<OnLoadEvent>
     onFastImageLoadEnd?: BubblingEventHandler<Readonly<{}>>
     onFastImageLoadStart?: BubblingEventHandler<Readonly<{}>>
@@ -42,6 +47,7 @@ interface NativeProps extends ViewProps {
     >
     tintColor?: ColorValue
     blurRadius?: Int32
+    transition?: Transition
 }
 
 export default codegenNativeComponent<NativeProps>('FastImageView')

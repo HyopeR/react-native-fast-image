@@ -91,6 +91,11 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
         view.setBlurRadius(blurRadius);
     }
 
+    @ReactProp(name = "transition")
+    public void setTransition(FastImageViewWithUrl view, @Nullable String transition) {
+        view.setTransition(transition);
+    }
+
     @Override
     public void onDropViewInstance(@NonNull FastImageViewWithUrl view) {
         // This will cancel existing requests.
