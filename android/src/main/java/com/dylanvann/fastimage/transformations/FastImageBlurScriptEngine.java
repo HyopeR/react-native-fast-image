@@ -6,6 +6,9 @@ import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
+import android.widget.ImageView;
+
+import androidx.annotation.Nullable;
 
 @SuppressWarnings("deprecation")
 public class FastImageBlurScriptEngine {
@@ -74,4 +77,11 @@ public class FastImageBlurScriptEngine {
 
         return bitmap;
     }
+
+
+    /**
+     * No cleanup is required for RenderScript.
+     * Just the placeholder for consistency.
+     */
+    public static void clean(@Nullable ImageView view) {}
 }

@@ -3,8 +3,10 @@ package com.dylanvann.fastimage.transformations;
 import android.graphics.Bitmap;
 import android.graphics.RenderEffect;
 import android.graphics.Shader;
+import android.view.View;
 import android.widget.ImageView;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 @RequiresApi(31)
@@ -66,5 +68,24 @@ public class FastImageBlurEffectEngine {
             apply(src, radius, view);
         });
         view.setTag(LISTENER_TAG_ID, true);
+    }
+
+    /**
+     * Cleanup method for RenderEffect.
+     */
+    public static void clean(@Nullable ImageView view) {
+        if (view == null) return;
+
+        view.setRenderEffect(null);
+        view.invalidate();
+
+        Object tag = view.getTag(LISTENER_TAG_ID);
+        if (tag instanceof View.OnLayoutChangeListener listener) {
+            view.removeOnLayoutChangeListener(listener);
+        }
+
+        view.setTag(SOURCE_TAG_ID, null);
+        view.setTag(RADIUS_TAG_ID, null);
+        view.setTag(LISTENER_TAG_ID, null);
     }
 }
