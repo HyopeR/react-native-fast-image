@@ -101,7 +101,7 @@ class FastImageViewManager extends SimpleViewManager<FastImageViewWithUrl> imple
     }
     @Override
     @ReactProp(name = "blurRadius")
-    public void setBlurRadius(FastImageViewWithUrl view, @Nullable Integer blurRadius) {
+    public void setBlurRadius(FastImageViewWithUrl view, int blurRadius) {
         view.setBlurRadius(blurRadius);
     }
 
