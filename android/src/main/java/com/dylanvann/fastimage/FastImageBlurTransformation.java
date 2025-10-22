@@ -64,4 +64,8 @@ public class FastImageBlurTransformation extends BitmapTransformation {
     private float normalizeBlurRadius(float radius) {
         return Math.min(BLUR_MAX_INPUT, Math.max(BLUR_MIN_INPUT, radius));
     }
+
+    public static void clean(@Nullable ImageView view) {
+        FastImageBlurCompat.clean(view);
+    }
 }

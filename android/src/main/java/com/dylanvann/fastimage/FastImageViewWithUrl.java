@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.os.Build;
 import android.util.Log;
 
 class FastImageViewWithUrl extends AppCompatImageView {
@@ -35,6 +36,7 @@ class FastImageViewWithUrl extends AppCompatImageView {
     private ReadableMap mSource = null;
     private Drawable mDefaultSource = null;
     private Integer mBlurRadius = 0;
+    private Integer mBlurRadiusPrevious = 0;
     public GlideUrl glideUrl;
     private String mTransition = "none"; // "none" | "fade"
 
@@ -63,7 +65,8 @@ class FastImageViewWithUrl extends AppCompatImageView {
   
     public void setBlurRadius(@Nullable Integer blurRadius) {
         mNeedsReload = true;
-        mBlurRadius = blurRadius;
+        mBlurRadiusPrevious = mBlurRadius == null ? 0 : mBlurRadius;
+        mBlurRadius = blurRadius == null ? 0 : blurRadius;
     }
 
     private boolean isNullOrEmpty(final String url) {
@@ -162,8 +165,9 @@ class FastImageViewWithUrl extends AppCompatImageView {
         if (requestManager != null) {
             RequestBuilder<? extends Drawable> builder;
             Map<String, Object> builderOptions = new HashMap<>();
-            builderOptions.put("blurRadius", mBlurRadius);
             builderOptions.put("view", this);
+            builderOptions.put("blurRadius", mBlurRadius);
+            builderOptions.put("blurRadiusShouldClean", mBlurRadiusPrevious > 0 && mBlurRadius <= 0);
 
             try {
                 builder = requestManager
