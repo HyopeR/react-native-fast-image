@@ -36,7 +36,7 @@ class FastImageViewWithUrl extends AppCompatImageView {
     private ReadableMap mSource = null;
     private Drawable mDefaultSource = null;
     private Integer mBlurRadius = 0;
-    private Integer mLastBlurRadius = 0;
+    private Integer mBlurRadiusPrevious = 0;
     public GlideUrl glideUrl;
     private String mTransition = "none"; // "none" | "fade"
 
@@ -65,7 +65,7 @@ class FastImageViewWithUrl extends AppCompatImageView {
   
     public void setBlurRadius(@Nullable Integer blurRadius) {
         mNeedsReload = true;
-        mLastBlurRadius = mBlurRadius == null ? 0 : mBlurRadius;
+        mBlurRadiusPrevious = mBlurRadius == null ? 0 : mBlurRadius;
         mBlurRadius = blurRadius == null ? 0 : blurRadius;
     }
 
@@ -165,8 +165,9 @@ class FastImageViewWithUrl extends AppCompatImageView {
         if (requestManager != null) {
             RequestBuilder<? extends Drawable> builder;
             Map<String, Object> builderOptions = new HashMap<>();
-            builderOptions.put("blurRadius", mBlurRadius);
             builderOptions.put("view", this);
+            builderOptions.put("blurRadius", mBlurRadius);
+            builderOptions.put("blurRadiusShouldClean", mBlurRadiusPrevious > 0 && mBlurRadius <= 0);
 
             try {
                 builder = requestManager
@@ -175,14 +176,6 @@ class FastImageViewWithUrl extends AppCompatImageView {
                                 .getOptions(context, imageSource, mSource, builderOptions)
                                 .placeholder(mDefaultSource) // show until loaded
                                 .fallback(mDefaultSource)); // null will not be treated as error
-
-                // Cleans RenderEffect for BlurRadius Android API >= 31.
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    if (mBlurRadius <= 0 && mLastBlurRadius > 0) {
-                        this.setRenderEffect(null);
-                        this.invalidate();
-                    }
-                }
 
                 if (key != null) {
                     builder.listener(new FastImageRequestListener(key));

@@ -142,24 +142,7 @@ class FastImageViewConverter {
                 .priority(priority)
                 .placeholder(TRANSPARENT_DRAWABLE);
 
-        int blurRadius = 0;
-        ImageView view = null;
-
-        if (imageOptions != null) {
-            Object blurRadiusValue = imageOptions.get("blurRadius");
-            if (blurRadiusValue instanceof Number) {
-                blurRadius = ((Number) blurRadiusValue).intValue();
-            }
-
-            Object viewValue = imageOptions.get("view");
-            if (viewValue instanceof ImageView) {
-                view = (ImageView) viewValue;
-            }
-        }
-
-        if (blurRadius > 0) {
-            options = options.transform(new FastImageBlurTransformation(context, blurRadius, view));
-        }
+        options = FastImageBlurHelper.transform(context, imageOptions, options);
 
         if (imageSource.isResource()) {
             // Every local resource (drawable) in Android has its own unique numeric id, which are

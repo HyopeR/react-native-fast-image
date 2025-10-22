@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.widget.ImageView;
 
+import javax.annotation.Nullable;
+
 public class FastImageBlurCompat {
     /**
      * For Android API >= 31, blur is applied using RenderEffect directly on the View.
@@ -16,6 +18,14 @@ public class FastImageBlurCompat {
             return FastImageBlurEffectEngine.apply(bitmap, radius, view);
         } else {
             return FastImageBlurScriptEngine.apply(bitmap, radius, context);
+        }
+    }
+
+    public static void clean(@Nullable ImageView view) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            FastImageBlurEffectEngine.clean(view);
+        } else {
+            FastImageBlurScriptEngine.clean(view);
         }
     }
 }
