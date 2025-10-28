@@ -83,6 +83,27 @@ cd ios && pod install
 
 > **Note**: You must be using React Native 0.60.0 or higher to use the most recent version of `@d11/react-native-fast-image`.
 
+### Optional: Disable SVG decoders
+
+If you don't need SVG support, you can disable SVG decoders via an environment variable to reduce native dependencies/binary size:
+
+- iOS (before running CocoaPods):
+
+```bash
+export DISABLE_SVG=1 
+cd ios && pod install
+```
+
+- Android (before building):
+
+```bash
+export DISABLE_SVG=1
+# then build as usual, e.g.
+yarn android
+```
+
+To re-enable SVG support, unset the variable or set it to 0 and reinstall pods/rebuild.
+
 ### Usage Example
 
 ```jsx
