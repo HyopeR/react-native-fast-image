@@ -46,7 +46,6 @@ interface NativeProps extends ViewProps {
         'cover'
     >
     tintColor?: ColorValue
-    transition?: Transition
     blurRadius?: Int32
     transition?: Transition
 }
