@@ -54,6 +54,15 @@ class FastImageViewWithUrl extends AppCompatImageView {
         mDefaultSource = source;
     }
 
+    public void setTransition(@Nullable String transition) {
+        mNeedsReload = true;
+        if (transition == null) {
+            mTransition = "none";
+        } else {
+            mTransition = transition;
+        }
+    }
+  
     public void setBlurRadius(@Nullable Integer blurRadius) {
         mNeedsReload = true;
         mBlurRadiusPrevious = mBlurRadius == null ? 0 : mBlurRadius;
