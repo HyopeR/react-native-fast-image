@@ -142,7 +142,7 @@ class FastImageViewConverter {
                 .priority(priority)
                 .placeholder(TRANSPARENT_DRAWABLE);
 
-        options = FastImageBlurHelper.transform(context, imageOptions, options);
+        options = FastImageBlurHelper.transform(context, options, imageOptions);
 
         if (imageSource.isResource()) {
             // Every local resource (drawable) in Android has its own unique numeric id, which are

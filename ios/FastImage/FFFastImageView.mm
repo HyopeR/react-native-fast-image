@@ -1,10 +1,13 @@
 #import "FFFastImageView.h"
 #import "FFFastImageBlurTransformation.h"
+#import <CoreImage/CoreImage.h>
 #import <SDWebImage/UIImage+MultiFormat.h>
 #import <SDWebImage/UIView+WebCache.h>
 #import <SDWebImageAVIFCoder/SDImageAVIFCoder.h>
 #import <SDWebImageWebPCoder/SDImageWebPCoder.h>
-#import <CoreImage/CoreImage.h>
+#if !defined(DISABLE_SVG) || DISABLE_SVG == 0
+#import <SDWebImageSVGCoder/SDImageSVGCoder.h>
+#endif
 
 @interface FFFastImageView ()
 
@@ -114,6 +117,9 @@ static NSString * const kFFFastImageDefaultErrorMessage = @"Load failed";
     self.clipsToBounds = YES;
     [[SDImageCodersManager sharedManager] addCoder:[SDImageAVIFCoder sharedCoder]];
     [[SDImageCodersManager sharedManager] addCoder:[SDImageWebPCoder sharedCoder]];
+#if !defined(DISABLE_SVG) || DISABLE_SVG == 0
+    [[SDImageCodersManager sharedManager] addCoder:[SDImageSVGCoder sharedCoder]];
+#endif
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {

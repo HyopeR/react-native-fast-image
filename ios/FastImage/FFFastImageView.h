@@ -22,8 +22,8 @@
 @property(nonatomic, strong) FFFastImageSource *source;
 @property(nonatomic, strong) UIImage *defaultSource;
 @property(nonatomic, strong) UIColor *imageColor;
-@property(nonatomic, strong) NSString *transition;
 @property(nonatomic, assign) CGFloat blurRadius;
+@property(nonatomic, strong) NSString *transition;
 
 #ifdef RCT_NEW_ARCH_ENABLED
 @property(nonatomic) facebook::react::SharedViewEventEmitter eventEmitter;

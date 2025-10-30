@@ -54,6 +54,12 @@ class FastImageViewWithUrl extends AppCompatImageView {
         mDefaultSource = source;
     }
 
+    public void setBlurRadius(@Nullable Integer blurRadius) {
+        mNeedsReload = true;
+        mBlurRadiusPrevious = mBlurRadius == null ? 0 : mBlurRadius;
+        mBlurRadius = blurRadius == null ? 0 : blurRadius;
+    }
+
     public void setTransition(@Nullable String transition) {
         mNeedsReload = true;
         if (transition == null) {
@@ -61,12 +67,6 @@ class FastImageViewWithUrl extends AppCompatImageView {
         } else {
             mTransition = transition;
         }
-    }
-  
-    public void setBlurRadius(@Nullable Integer blurRadius) {
-        mNeedsReload = true;
-        mBlurRadiusPrevious = mBlurRadius == null ? 0 : mBlurRadius;
-        mBlurRadius = blurRadius == null ? 0 : blurRadius;
     }
 
     private boolean isNullOrEmpty(final String url) {
