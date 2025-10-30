@@ -102,17 +102,6 @@ using namespace facebook::react;
 
     fastImageView.imageColor = RCTUIColorFromSharedColor(newViewProps.tintColor);
 
-    NSString *transition = @"none";
-    switch (newViewProps.transition) {
-        case FastImageViewTransition::Fade:
-            transition = @"fade";
-            break;
-        case FastImageViewTransition::None:
-        default:
-            transition = @"none";
-            break;
-    }
-    fastImageView.transition = transition;
     fastImageView.blurRadius = newViewProps.blurRadius;
 
     NSString *transition = @"none";
