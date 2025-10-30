@@ -21,6 +21,8 @@ import FieldsWebP from './images/fields.webp';
 import JellyfishGIF from './images/jellyfish.gif';
 // @ts-ignore
 import JellyfishWebP from './images/jellyfish.webp';
+// @ts-ignore
+import ReactSvg from './images/react-native.svg';
 
 const Image = ({source, ...p}: FastImageProps) => (
   <FastImage style={styles.imageSquare} source={source} {...p} />
@@ -89,6 +91,7 @@ export const LocalImagesExample = () => (
       <Example name="Require" source={require('./images/fields.jpg')} />
       <Example name="Import" source={FieldsImage} />
       <Example name="GIF" source={JellyfishGIF} />
+      <Example name="SVG" source={ReactSvg} />
       <Example name="Animated WebP" source={JellyfishWebP} />
       <Example name="Base64" source={{uri: FieldsBase64}} />
       <Example name="WebP" source={FieldsWebP} />

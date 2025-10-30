@@ -48,6 +48,7 @@ interface NativeProps extends ViewProps {
     tintColor?: ColorValue
     transition?: Transition
     blurRadius?: Int32
+    transition?: Transition
 }
 
 export default codegenNativeComponent<NativeProps>('FastImageView')

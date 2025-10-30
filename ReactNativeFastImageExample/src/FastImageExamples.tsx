@@ -14,6 +14,7 @@ import {BlurRadiusExample} from './BlurRadiusExample';
 import {LocalImagesExample} from './LocalImagesExample';
 import {AutoSizeExample} from './AutoSizeExample';
 import {AvifExample} from './AvifExample';
+import {SvgExample} from './SvgExample';
 import {TransitionExample} from './TransitionExample';
 
 const FastImageExample = () => (
@@ -33,6 +34,7 @@ const FastImageExample = () => (
         </Section>
         <PriorityExample />
         <GifExample />
+        <SvgExample />
         <BorderRadiusExample />
         <ProgressExample />
         <PreloadExample />
