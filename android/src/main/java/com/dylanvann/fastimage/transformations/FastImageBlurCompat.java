@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.widget.ImageView;
 
-import javax.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 public class FastImageBlurCompat {
     /**
