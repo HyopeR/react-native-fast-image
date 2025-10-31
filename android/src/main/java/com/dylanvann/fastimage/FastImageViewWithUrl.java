@@ -35,8 +35,8 @@ class FastImageViewWithUrl extends AppCompatImageView {
     private boolean mNeedsReload = false;
     private ReadableMap mSource = null;
     private Drawable mDefaultSource = null;
-    private Integer mBlurRadius = 0;
-    private Integer mBlurRadiusPrevious = 0;
+    private int mBlurRadius = 0;
+    private int mBlurRadiusPrevious = 0;
     public GlideUrl glideUrl;
     private String mTransition = "none"; // "none" | "fade"
 
@@ -56,7 +56,7 @@ class FastImageViewWithUrl extends AppCompatImageView {
 
     public void setBlurRadius(@Nullable Integer blurRadius) {
         mNeedsReload = true;
-        mBlurRadiusPrevious = mBlurRadius == null ? 0 : mBlurRadius;
+        mBlurRadiusPrevious = mBlurRadius;
         mBlurRadius = blurRadius == null ? 0 : blurRadius;
     }
 
